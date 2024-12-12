@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+
+# Compressed archives
+*.zip
+
+# Additional Executables
+*.bat
+*.sh
+*.run
+*.msi
+*.apk
