@@ -1,4 +1,7 @@
-#include "Buffer.hpp"
+#include "buffer.hpp"
+#include <fstream>
+#include <string>
+#include <vector>
 #include <iostream>
 
 using namespace std;
@@ -30,6 +33,3 @@ Registro Buffer::lerRegistroFixo(ifstream& in) {
 
     return reg;
 }
-
-
-

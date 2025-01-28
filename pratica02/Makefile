@@ -1,62 +1,55 @@
-# Arquivo principal: main.cpp
+# definindo as variáveis do projeto (MAIN é o nome do arquivo principal, que contem a função main, sem a extensao)
+MAIN 	:= main
+# objetos a serem gerados na compilação
+OBJECTS := $(MAIN).o registro.o buffer.o arquivo.o
+# (para C, pode-se usar o padrão ISO 2011 (c11) ou 2018 (c18), dependendo do seu compilador...
+# usar -std=c98 no lugar do c++11, c++17, c++20, etc.. 
 
-# Definindo as variáveis do projeto (MAIN é o nome do arquivo principal, que contém a função main, sem a extensão)
-MAIN := main
+FLAGS 	:= -Wall -Wextra -std=c++17 -pedantic-errors
 
-# Objetos a serem gerados na compilação
-OBJECTS := $(MAIN).o Registro.o Buffer.o Arquivo.o
 
-# Flags de compilação
-FLAGS := -Wall -Wextra -std=c++17 -pedantic-errors
+# habilitar a depuração
+DEBUG :=  -g
 
-# Habilitar depuração
-DEBUG := -g
+# necessário apenas quando se incluir  a biblioteca <math.h> em algum arquivo fonte no projeto
+MATH 	:= -lm
 
-# Necessário apenas quando se incluir a biblioteca <math.h> em algum arquivo fonte
-MATH := -lm
+# definição do compilador: para C usar o gcc, por exemplo
+CC		:= g++
 
-# Definição do compilador
-CC := g++
-
-# Ajustando parâmetros/comandos ao sistema operacional
+# ajustando alguns parâmetros/comandos ao sistema operacional
 ifeq ($(OS), Windows_NT)
 OUTPUTMAIN := $(MAIN).exe
 else
 OUTPUTMAIN := $(MAIN).out
 endif
 
-# Ponto de compilação principal
-all: $(OUTPUTMAIN)
-	@echo "Compiling 'all' complete!"
+# ponto de compilação principal
+all: main.exe
+	@echo Compiling 'all' complete!
 
-# Gerando o arquivo executável
-$(OUTPUTMAIN): $(OBJECTS)
+# gerando o arquivo executavel
+main.exe: $(OBJECTS)  
 	$(CC) $(FLAGS) $(OBJECTS) -o $(OUTPUTMAIN) $(MATH)
-
-# Gerando o arquivo objeto da função principal
-main.o: $(MAIN).cpp Arquivo.hpp Registro.hpp Buffer.hpp
+	
+# gerando o arquivo objeto da função principal... adicionar as dependencias (se houverem)
+main.o: $(MAIN).cpp registro.hpp buffer.hpp arquivo.hpp
 	$(CC) $(FLAGS) -c $(MAIN).cpp
+	
+registro.o: registro.cpp registro.hpp
+	$(CC) $(FLAGS) -c registro.cpp
 
-# Gerando o arquivo objeto Registro.o
-Registro.o: Registro.cpp Registro.hpp
-	$(CC) $(FLAGS) -c Registro.cpp
+buffer.o: buffer.cpp registro.hpp buffer.hpp
+	$(CC) $(FLAGS) -c buffer.cpp
 
-# Gerando o arquivo objeto Buffer.o
-Buffer.o: Buffer.cpp Buffer.hpp Registro.hpp Arquivo.hpp
-	$(CC) $(FLAGS) -c Buffer.cpp
+arquivo.o: arquivo.cpp buffer.hpp arquivo.hpp  #se precisar coleoque aqui registo.hpp
+	$(CC) $(FLAGS) -c arquivo.cpp
 
-# Gerando o arquivo objeto Arquivo.o
-Arquivo.o: Arquivo.cpp Arquivo.hpp Registro.hpp Buffer.hpp
-	$(CC) $(FLAGS) -c Arquivo.cpp
-
-# Comando para limpar arquivos gerados
 clean:
-	@echo "Cleaning up..."
-	$(RM) $(OBJECTS) $(OUTPUTMAIN)
-	@echo "Cleanup complete!"
+	rm -rf $(OBJECTS)
+	rm -rf $(OUTPUTMAIN)
+	@echo Cleanup complete!!!
 
-# Comando para rodar o programa
 run: all
-	@echo "Running the executable..."
-	./$(OUTPUTMAIN)  # ou apenas "$(OUTPUTMAIN)" para Windows
-	@echo "Execution complete!"
+	./$(OUTPUTMAIN)
+	@echo Executing 'all' complete!!!

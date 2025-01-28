@@ -1,18 +1,16 @@
-#ifndef REGISTRO_H
-#define REGISTRO_H
+#ifndef REGISTRO_HPP
+#define REGISTRO_HPP
 
-#include <string>
-#include <vector>
+#include<string>
 
 using namespace std;
 
-struct Registro {
-
+class Registro{
+public:
     string nome;
     int idade;
     string packFixed();
     void unpackFixed(string& buffer);
-    
 };
 
 #endif

@@ -10,15 +10,11 @@ void lerArquivo(const string& nomeArquivo){
         cerr << "Erro ao abrir o arquivo: " << nomeArquivo << endl;
         return;
     }
-
-    string linha;
-    getline(arquivo, linha); // ler e descartar a primeira linha
-    while(getline(arquivo, linha)){
-        stringstream ss(linha);
-        string nome, idadeStr;
-        if (getline(ss, nome)) {
-                cout << nome << endl;
-        }
+    
+    char ch;
+    while (!arquivo.eof()){
+        arquivo.get(ch);
+        cout << ch;
     }
     arquivo.close();
 }

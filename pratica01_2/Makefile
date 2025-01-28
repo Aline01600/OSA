@@ -1,74 +1,67 @@
-# Nome do executável
-EXEC = programa
-
-# Compilador e flags de compilação
-CXX = g++##############################################################################
-# Exemplo de makefile para um projeto bem simples em linguagem C++
-# Para simplificar, todos os arquivos estão em um mesmo diretório
 ##############################################################################
+# Exemplo de makefile para um projeto em linguagem C++...
+# Para simplificar, todos os arquivos estão em um mesmo diretório
 ##############################################################################
 # Arquivo principal: main.cpp
 ##############################################################################
-# Arquivos auxiliares: Registro.cpp Registro.h
+#                       Arquivos auxiliares do projeto
 ##############################################################################
-# Dependencias: 
-# main.cpp => Registro.cpp e Registro.h
-# Registro.cpp ==> Registro.h
+# myFunc1.cpp: depende de myFunc1.h (definição dos protótipos das funções 
+#            auxiliares utilizadas no arquivo myFunc1.c e algumas constantes 
+#            usadas tanto em myFunc1.c, quanto em myFunc2.cpp)
+# myFunc2.cpp: depende de myFunc2.h e myFunc1.h( definição de constantes e dos 
+#            protótipos das funções usadas no arquivo myFunc2.cpp) 
+# myFunc3.cpp: depende de myFunc3.h e outros.h (ambos contem ou constantes ou 
+#            protótipos de funções contidas no arquivo myFunc3.cpp) 
 ##############################################################################
 
-# definição de variáveis auxiliares do makefile
-MAIN = main
-OBJECTS	= $(MAIN).o Registro.o
-FLAGS = -Wall -Wextra -std=c++23 -pedantic-errors
-MATH = -lm
-DEBUG = -g
-CC = g++
-# Nome do arquivo de saída (sem .exe no Ubuntu)
+# definindo as variáveis do projeto (MAIN é o nome do arquivo principal, que contem a função main, sem a extensao)
+MAIN 	:= main
+# objetos a serem gerados na compilação
+OBJECTS := $(MAIN).o Funcoes.o
+# (para C, pode-se usar o padrão ISO 2011 (c11) ou 2018 (c18), dependendo do seu compilador...
+# usar -std=c98 no lugar do c++11, c++17, c++20, etc.. 
+
+FLAGS 	:= -Wall -Wextra -std=c++17 -pedantic-errors
+
+
+# habilitar a depuração
+DEBUG :=  -g
+
+# necessário apenas quando se incluir  a biblioteca <math.h> em algum arquivo fonte no projeto
+MATH 	:= -lm
+
+# definição do compilador: para C usar o gcc, por exemplo
+CC		:= g++
+
+# ajustando alguns parâmetros/comandos ao sistema operacional
+ifeq ($(OS), Windows_NT)
+OUTPUTMAIN := $(MAIN).exe
+else
 OUTPUTMAIN := $(MAIN).out
+endif
 
-# regra de compilação do projeto completo
-all: $(OUTPUTMAIN)
+# ponto de compilação principal
+all: main.exe
+	@echo Compiling 'all' complete!
 
-# regra para geração do arquivo executavel
-$(OUTPUTMAIN): $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(OUTPUTMAIN) $(FLAGS)
+# gerando o arquivo executavel
+main.exe: $(OBJECTS)  
+	$(CC) $(FLAGS) $(OBJECTS) -o $(OUTPUTMAIN) $(MATH)
+	
+# gerando o arquivo objeto da função principal... adicionar as dependencias (se houverem)
+main.o: $(MAIN).cpp Funcoes.hpp
+	$(CC) $(FLAGS) -c $(MAIN).cpp
+	
+# gerando o arquivo objeto da minha biblioteca 1 (myFunc1.o) que depende dos arquivos myFunc1.c, myFunc1.h
+myFunc1.o: Funcoes.cpp Funcoes.h
+	$(CC) $(FLAGS) -c Funcoes.cpp
 
-# regra de compilação do objeto $(MAIN).o
-$(MAIN).o: $(MAIN).cpp Registro.h
-	$(CC) -c $(MAIN).cpp -o $(MAIN).o $(FLAGS)
-
-# regra de compilação do objeto Registro.o
-Registro.o: Registro.cpp Registro.h
-	$(CC) -c Registro.cpp -o Registro.o $(FLAGS)
-
-# regra para limpeza do projeto (excluir arquivos .o e o executável). 
 clean:
-	rm -rf *.o
+	rm -rf $(OBJECTS)
 	rm -rf $(OUTPUTMAIN)
+	@echo Cleanup complete!!!
 
-# regra para compilar todo o projeto (se necessário) e, posteriormente, executar
 run: all
 	./$(OUTPUTMAIN)
-CXXFLAGS = -Wall -std=c++11
-
-# Arquivos de origem e objetos
-SRCS = main.cpp Registro.cpp
-OBJS = $(SRCS:.cpp=.o)
-
-# Regra principal (target padrão)
-all: $(EXEC)
-
-# Gera o executável
-$(EXEC): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $(EXEC) $(OBJS)
-
-# Compila os arquivos .cpp em .o
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-# Limpeza dos arquivos de objeto e executável
-clean:
-	rm -f $(OBJS) $(EXEC)
-
-# Phony targets para evitar conflitos com arquivos de mesmo nome
-.PHONY: all clean
+	@echo Executing 'all' complete!!!

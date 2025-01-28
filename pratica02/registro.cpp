@@ -1,20 +1,21 @@
-#include "Registro.hpp"
 #include <cstring>
 #include <string>
 #include <sstream>
+#include "registro.hpp"
 
 std::string Registro::packFixed() {
     constexpr size_t TAMANHO_NOME = 100;
 
-    // Inicializa e preenche com '\0'
     std::string buffer(TAMANHO_NOME + sizeof(int), '\0');
 
     std::strncpy(&buffer[0], nome.c_str(), TAMANHO_NOME);
-    int* idadePtr = reinterpret_cast<int*>(&buffer[TAMANHO_NOME]);
-    *idadePtr = idade;
+    buffer[TAMANHO_NOME - 1] = '\0';
+
+    std::memcpy(&buffer[TAMANHO_NOME], &idade, sizeof(int));
 
     return buffer;
 }
+
 
 void Registro::unpackFixed(std::string& buffer) {
     // Extrai o nome
@@ -24,5 +25,3 @@ void Registro::unpackFixed(std::string& buffer) {
     const char* idadePtr = &buffer[100];
     idade = *reinterpret_cast<const int*>(idadePtr);
 }
-
-
