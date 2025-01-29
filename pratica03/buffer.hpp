@@ -9,11 +9,11 @@ public:
     string nomeArquivo;
 
     vector<Registro> lerDadostxt();
-    void adicionarRegistroFixo(Registro reg);
-    vector<Registro> lerRegistrosFixo();
+    void adicionarRegistroVariavel(Registro reg);
+    vector<Registro> lerRegistrosVariavel();
 
-    void escreverRegistroFixo(Registro reg, ofstream& out);
-    Registro lerRegistroFixo(ifstream& in);
+    void escreverRegistroVariavel(Registro reg, ofstream& out);
+    Registro lerRegistroVariavel(ifstream& in);
 };
 
 #endif

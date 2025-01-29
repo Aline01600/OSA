@@ -6,9 +6,8 @@ int main(){
     
     vector<Registro>pessoas;
     Buffer buffer;
-     buffer.nomeArquivo = "Dados.txt";
-     pessoas = buffer.lerDadostxt();
-    // temos um vetor pessoas
-
+    buffer.nomeArquivo = "Dados.txt";
+    pessoas = buffer.lerDadostxt();
+    
     return 0;
 }

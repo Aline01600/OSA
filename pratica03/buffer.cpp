@@ -30,5 +30,4 @@ vector<Registro> Buffer::lerDadostxt(){
     }
     arquivo.close();
     return pessoas;   
-
 }

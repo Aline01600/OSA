@@ -12,8 +12,8 @@ class Registro{
     string telefone;
     string data_N;
     
-    string packFixed();
-    void unpackFixed(string& buffer);
+    string pack();
+    void unpack(string& buffer);
     
 };
 
