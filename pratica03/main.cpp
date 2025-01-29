@@ -1,13 +1,13 @@
 #include<iostream>
 #include<vector>
 #include<fstream>
-#include "registro.hpp"
+#include "buffer.hpp"
 int main(){
     
     vector<Registro>pessoas;
-    Registro reg;
-     reg.nomeArquivo = "Dados.txt";
-     pessoas = reg.lerDadostxt();
+    Buffer buffer;
+     buffer.nomeArquivo = "Dados.txt";
+     pessoas = buffer.lerDadostxt();
     // temos um vetor pessoas
 
     return 0;
