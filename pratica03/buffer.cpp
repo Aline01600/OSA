@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include"buffer.hpp"
+#include"registro.hpp"
 
 using namespace std;
 
@@ -30,4 +31,18 @@ vector<Registro> Buffer::lerDadostxt(){
     }
     arquivo.close();
     return pessoas;   
+}
+
+void Buffer::escreverRegistroVariavel(Registro reg){
+    ofstream arquivo2(nomeArquivoBin, ios::binary | ios::app);
+    if(!arquivo2.is_open()){
+        cerr << "Erro: Erro ao abrir o arquivo para escrita!" << endl;
+        return;
+    }
+
+    buffer.clear();
+    buffer = reg.pack();
+    arquivo2.write(buffer.c_str(), buffer.size());
+    
+    arquivo2.close();
 }

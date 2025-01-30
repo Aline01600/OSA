@@ -9,5 +9,10 @@ int main(){
     buffer.nomeArquivo = "Dados.txt";
     pessoas = buffer.lerDadostxt();
     
+    buffer.nomeArquivoBin = "registros.bin";
+    for(const auto& reg : pessoas){
+        buffer.escreverRegistroVariavel(reg);
+    }
+    
     return 0;
 }

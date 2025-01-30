@@ -7,12 +7,10 @@ using namespace std;
 class Buffer{
 public:
     string nomeArquivo;
-
+    string nomeArquivoBin;
+    string buffer;
     vector<Registro> lerDadostxt();
-    void adicionarRegistroVariavel(Registro reg);
-    vector<Registro> lerRegistrosVariavel();
-
-    void escreverRegistroVariavel(Registro reg, ofstream& out);
+    void escreverRegistroVariavel(Registro reg);
     Registro lerRegistroVariavel(ifstream& in);
 };
 
