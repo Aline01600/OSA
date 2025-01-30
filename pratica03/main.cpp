@@ -13,6 +13,13 @@ int main(){
     for(const auto& reg : pessoas){
         buffer.escreverRegistroVariavel(reg);
     }
+
+    vector<Registro> registros;
+    registros = buffer.lerRegistroVariavel();
     
+    for(const auto& reg : registros){
+        cout << reg.nome << " " << reg.sobrenome << " " <<
+        reg.telefone << " " << reg.data_N << endl;
+    }
     return 0;
 }

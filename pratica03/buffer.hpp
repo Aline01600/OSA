@@ -11,7 +11,7 @@ public:
     string buffer;
     vector<Registro> lerDadostxt();
     void escreverRegistroVariavel(Registro reg);
-    Registro lerRegistroVariavel(ifstream& in);
+    vector<Registro> lerRegistroVariavel();
 };
 
 #endif

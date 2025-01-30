@@ -43,6 +43,39 @@ void Buffer::escreverRegistroVariavel(Registro reg){
     buffer.clear();
     buffer = reg.pack();
     arquivo2.write(buffer.c_str(), buffer.size());
-    
+
     arquivo2.close();
 }
+
+vector<Registro> Buffer::lerRegistroVariavel() {
+    vector<Registro> registros;
+    ifstream arquivo2(nomeArquivoBin, ios::binary);
+
+    if (!arquivo2.is_open()) {
+        cerr << "Erro: erro ao abrir o arquivo para leitura" << endl;
+        return registros;
+    }
+
+    while (arquivo2.peek() != EOF) {
+        // Lê o tamanho do registro
+        int tamanho;
+        if (!arquivo2.read(reinterpret_cast<char*>(&tamanho), sizeof(int))) {
+            cerr << "Erro: falha ao ler o tamanho do registro." << endl;
+            break;
+        }
+        
+        buffer.resize(tamanho + sizeof(int), '\0');  
+
+        if (!arquivo2.read(&buffer[sizeof(int)], tamanho)) {
+            cerr << "Erro: falha ao ler os dados do registro." << endl;
+            break;
+        }
+
+        Registro reg;
+        reg.unpack(buffer);
+        registros.push_back(reg);
+    }
+
+    arquivo2.close();
+    return registros;
+ }
