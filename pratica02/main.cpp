@@ -6,8 +6,8 @@ int main(){
 
     vector<Registro>pessoas;
     Arquivo arquivo;
-    for(int i = 1; i<=5; ++ i){
-        arquivo.nomeArquivo = "Nomes_Idades_" + to_string(i) + ".csv";
+    
+        arquivo.nomeArquivo = "Nomes_Idades_1.csv";
         pessoas = arquivo.lerRegistrosCSV();
     
         for(const auto& reg : pessoas){
@@ -21,14 +21,5 @@ int main(){
             cout << reg.nome << " " << reg.idade << endl;
         }
         
-        //os codigos abaixo são para testar leitura e escrita dos arquivos
-        //separador entre os testes
-        cout <<"-----------------------------------------\n";
-        //limpa os vetores e remove o arquivo após cada teste
-        pessoas.clear();
-        registros.clear();
-        remove("registros.bin");
-    }
-    
     return 0;
 }

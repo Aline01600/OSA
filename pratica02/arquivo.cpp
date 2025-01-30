@@ -20,7 +20,6 @@ vector<Registro> Arquivo::lerRegistrosCSV(){
     while(getline(arquivo,linha)){
         stringstream linhaStream(linha); //fluxo apartir da linha lida, ajuda dividir e extrair informações
         string campo;
-        Arquivo arquivo;
 
         if(getline(linhaStream, campo, ',')){ //lê cada palavra até encontrar ','
             pessoa.nome = campo;
@@ -39,8 +38,8 @@ void Arquivo::adicionarRegistroFixo(Registro reg){
 
     ofstream arquivo2("registros.bin", ios::binary | ios::app);
     if (!arquivo2.is_open()) {
-    cerr << "Erro: Erro abrir o arquivo para escrita!" << endl;
-    return;
+        cerr << "Erro: Erro abrir o arquivo para escrita!" << endl;
+        return;
     }
 
     buffer.escreverRegistroFixo(reg, arquivo2);  
