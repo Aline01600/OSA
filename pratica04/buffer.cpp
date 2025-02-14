@@ -36,6 +36,33 @@ vector<Registro> Buffer::lerDadosCSV(){
     return pessoas;   
 }
 
+void Buffer::escreverRegistroFixo(Registro reg, long endereco){
+    ofstream arquivo3("indice.bin", ios::binary | ios::app);
+    if (!arquivo3.is_open()) {
+        cerr << "Erro: Erro ao abrir o arquivo de indices para escrita!" << endl;
+        return;
+    }
+
+    Indice indice;
+    indice.ID_livro = reg.ID;
+    indice.endereco = endereco;
+
+    int bufferIndice = indice.packfixed();
+    arquivo3.write(reinterpret_cast<char*>(& bufferIndice), sizeof(int));
+    arquivo3.close();
+    
+    arvore.Inserir(indice);
+ 
+}
+
+void salvarArvore(){
+
+}
+
+void carregarArvore(){
+
+}
+
 void Buffer::escreverRegistroVariavel(Registro reg){
    
     ofstream arquivo2(nomeArquivoBin, ios::binary | ios::app);
@@ -43,12 +70,15 @@ void Buffer::escreverRegistroVariavel(Registro reg){
         cerr << "Erro: Erro ao abrir o arquivo para escrita!" << endl;
         return;
     }
-
+    long posicao = arquivo2.tellp(); //captura posição onde o registro será salvo
+   
     buffer.clear();
     buffer = reg.pack();
-    long posicao = arquivo2.tellp(); //pega a posição antes de escrever
     arquivo2.write(buffer.c_str(), buffer.size());
     arquivo2.close();
+    
+    escreverRegistroFixo(reg, posicao);
+
 }
 
 vector<Registro> Buffer::lerRegistroVariavel() {
@@ -82,4 +112,5 @@ vector<Registro> Buffer::lerRegistroVariavel() {
 
     arquivo2.close();
     return registros;
- }
+} 
+

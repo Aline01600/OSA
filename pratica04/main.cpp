@@ -7,19 +7,18 @@ using namespace std;
 
 int main(){
 
-    vector<Registro> livros;
     Buffer buffer;
-
     buffer.nomeArquivo = "booksDataset.csv";
-    livros = buffer.lerDadosCSV();
-
-    
     buffer.nomeArquivoBin = "livros.bin";
+    
+    vector<Registro> livros;
+    livros = buffer.lerDadosCSV();
     for(const auto& reg: livros){
         buffer.escreverRegistroVariavel(reg);
     }
 
-    vector<Registro> registros;
+    buffer.arvore.Travessia_InOrder();
+   /* vector<Registro> registros;
     registros = buffer.lerRegistroVariavel();
 
     for(const auto& reg : registros){
@@ -27,6 +26,6 @@ int main(){
         cout << reg.ID << " " << reg.titulo << " " <<
         reg.autor << " " << reg.anoPublicacao << " " <<
         reg.categoria << " " << reg.genero << endl;
-    }
+    }*/
     return 0;
 }

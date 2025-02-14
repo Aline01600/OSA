@@ -14,11 +14,11 @@ class Buffer{
     string nomeArquivoBin;
     string buffer;
     Indice indice;
-    ArvoreBinaria<Registro> arvore;
+    ArvoreBinaria<Indice> arvore;
     vector<Registro>lerDadosCSV();
     void escreverRegistroVariavel(Registro reg);
     vector<Registro> lerRegistroVariavel();
-    void escreverRegistroFixo();
+    void escreverRegistroFixo(Registro reg, long endereco);
     void lerRegistroFixo();
 
 };

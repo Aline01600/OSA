@@ -8,8 +8,6 @@ class Indice{
     public:
     int ID_livro;
     int endereco;   
-    string nomeIndicesBin; 
-    int bufferIndices;
     int packfixed();
     void unpackfixed(int valor);
 };
