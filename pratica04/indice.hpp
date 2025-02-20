@@ -1,15 +1,16 @@
 #ifndef INDICE_HPP
 #define INDICE_HPP
-#include<string>
 
 using namespace std;
 
 class Indice{
     public:
     int ID_livro;
-    int endereco;   
-    int packfixed();
-    void unpackfixed(int valor);
+    long long endereco; 
+    string buffer;
+    
+    string packfixed();
+    void unpackfixed(string &buffer); 
 };
 
 #endif

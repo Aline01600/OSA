@@ -2,7 +2,7 @@
 MAIN := main
 
 # Arquivos objeto
-OBJECTS := $(MAIN).o registro.o buffer.o
+OBJECTS := $(MAIN).o registro.o buffer.o indice.o
 
 # Flags de compilação
 FLAGS := -Wall -Wextra -std=c++17 -pedantic-errors
@@ -40,23 +40,22 @@ main.o: $(MAIN).cpp registro.hpp buffer.hpp indice.hpp Fila.hpp Pilha.hpp
 	$(CC) $(FLAGS) -c $(MAIN).cpp
 
 # Compilação de Registro.o
-Registro.o: registro.cpp registro.hpp
+registro.o: registro.cpp registro.hpp
 	$(CC) $(FLAGS) -c registro.cpp
 
 # Compilação de Buffer.o
-Buffer.o: Buffer.cpp buffer.hpp registro.hpp arvore.hpp
+buffer.o: buffer.cpp buffer.hpp registro.hpp arvore.hpp
 	$(CC) $(FLAGS) -c buffer.cpp
 
 # Compilação de Indice.o
-Buffer.o: indice.cpp indice.hpp 
+indice.o: indice.cpp indice.hpp
 	$(CC) $(FLAGS) -c indice.cpp
-
 
 # Limpeza de arquivos gerados
 clean:
 	@echo "Limpando arquivos temporários..."
 	rm -rf $(OBJECTS)
-	rm -rf $(OUTPUTMAIN)
+	rm -rf $(OUTPUT)
 	rm -rf *.bin
 	rm -rf *.dat
 	@echo "Limpeza concluída!"

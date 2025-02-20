@@ -4,7 +4,6 @@
 #include<sstream>
 #include"buffer.hpp"
 
-
 using namespace std;
 
 vector<Registro> Buffer::lerDadosCSV(){
@@ -36,7 +35,7 @@ vector<Registro> Buffer::lerDadosCSV(){
     return pessoas;   
 }
 
-void Buffer::escreverRegistroFixo(Registro reg, long endereco){
+void Buffer::escreverRegistroFixo(int id, long long endereco){
     ofstream arquivo3("indice.bin", ios::binary | ios::app);
     if (!arquivo3.is_open()) {
         cerr << "Erro: Erro ao abrir o arquivo de indices para escrita!" << endl;
@@ -44,23 +43,35 @@ void Buffer::escreverRegistroFixo(Registro reg, long endereco){
     }
 
     Indice indice;
-    indice.ID_livro = reg.ID;
+    indice.ID_livro = id;
     indice.endereco = endereco;
 
-    int bufferIndice = indice.packfixed();
-    arquivo3.write(reinterpret_cast<char*>(& bufferIndice), sizeof(int));
+    indice.buffer = indice.packfixed();
+    arquivo3.write(indice.buffer.data(), indice.buffer.size());
     arquivo3.close();
+}
+
+vector<Indice> Buffer::lerRegistroFixo() {
+    const size_t bufferSize = sizeof(int) + sizeof(long long);
+    vector<Indice> indices;
     
-    arvore.Inserir(indice);
- 
-}
+    ifstream arquivo3("indice.bin", ios::binary);
+    if (!arquivo3.is_open()) {
+        cerr << "Erro: falha ao abrir o arquivo binário." << endl;
+        return indices;
+    }
+  
+   while (!arquivo3.eof()) {
+        Indice indice;
+        string buffer(bufferSize, '\0');
+        if (arquivo3.read(&buffer[0], bufferSize)) {
+            indice.unpackfixed(buffer);
+            indices.push_back(indice);
+        } 
+    }
 
-void salvarArvore(){
-
-}
-
-void carregarArvore(){
-
+    arquivo3.close();
+    return indices;
 }
 
 void Buffer::escreverRegistroVariavel(Registro reg){
@@ -70,17 +81,18 @@ void Buffer::escreverRegistroVariavel(Registro reg){
         cerr << "Erro: Erro ao abrir o arquivo para escrita!" << endl;
         return;
     }
-    long posicao = arquivo2.tellp(); //captura posição onde o registro será salvo
+    long long posicao = arquivo2.tellp(); //captura posição onde o registro será salvo
    
     buffer.clear();
     buffer = reg.pack();
+    int tamanho = buffer.size();
+    arquivo2.write(reinterpret_cast<char*>(&tamanho), sizeof(int));
     arquivo2.write(buffer.c_str(), buffer.size());
     arquivo2.close();
     
-    escreverRegistroFixo(reg, posicao);
+    escreverRegistroFixo(reg.ID, posicao);
 
 }
-
 vector<Registro> Buffer::lerRegistroVariavel() {
     vector<Registro> registros;
     ifstream arquivo2(nomeArquivoBin, ios::binary);
@@ -98,9 +110,9 @@ vector<Registro> Buffer::lerRegistroVariavel() {
             break;
         }
         
-        buffer.resize(tamanho + sizeof(int), '\0');  
+        buffer.resize(tamanho, '\0');  
 
-        if (!arquivo2.read(&buffer[sizeof(int)], tamanho)) {
+        if (!arquivo2.read(&buffer[0], tamanho)) {
             cerr << "Erro: falha ao ler os dados do registro." << endl;
             break;
         }
