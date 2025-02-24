@@ -22,3 +22,8 @@ void Indice::unpackfixed(string &buffer){
     memcpy(&ID_livro, buffer.data(), sizeof(int));
     memcpy(&endereco, buffer.data() + sizeof(int), sizeof(long long));
 }
+
+std::ostream& operator<<(std::ostream& os, const Indice& indice) {
+    os << "(" << indice.ID_livro << ", " << indice.endereco << ") ";
+    return os;
+}

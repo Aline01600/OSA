@@ -27,7 +27,6 @@ vector<Registro> Buffer::lerDadosCSV(){
         if(getline(linhaStream, campo, ';')) livro.autor = (campo);
         if(getline(linhaStream, campo, ';')) livro.anoPublicacao = (campo); 
         if(getline(linhaStream, campo, ';')) livro.categoria = (campo);
-        if(getline(linhaStream, campo, ';')) livro.genero = (campo);
         
        pessoas.push_back(livro);
     }
@@ -36,7 +35,7 @@ vector<Registro> Buffer::lerDadosCSV(){
 }
 
 void Buffer::escreverRegistroFixo(int id, long long endereco){
-    ofstream arquivo3("indice.bin", ios::binary | ios::app);
+    ofstream arquivo3(nomeIndiceBin, ios::binary | ios::app);
     if (!arquivo3.is_open()) {
         cerr << "Erro: Erro ao abrir o arquivo de indices para escrita!" << endl;
         return;
@@ -55,7 +54,7 @@ vector<Indice> Buffer::lerRegistroFixo() {
     const size_t bufferSize = sizeof(int) + sizeof(long long);
     vector<Indice> indices;
     
-    ifstream arquivo3("indice.bin", ios::binary);
+    ifstream arquivo3(nomeIndiceBin, ios::binary);
     if (!arquivo3.is_open()) {
         cerr << "Erro: falha ao abrir o arquivo binário." << endl;
         return indices;
@@ -125,4 +124,62 @@ vector<Registro> Buffer::lerRegistroVariavel() {
     arquivo2.close();
     return registros;
 } 
+
+void Buffer::inserirIndicesArvore(const vector<Indice>& indices){
+
+    for (const Indice& i : indices) {
+        arvore.Inserir(i); 
+    }
+}
+
+Registro Buffer::buscarRegisro(int id) {
+    Indice indice_busca;
+    indice_busca.ID_livro = id;
+
+    if (arvore.Pesquisar(indice_busca)) {
+        Indice indice_encontrado;
+        for (const auto& indice : lerRegistroFixo()){
+            if(indice.ID_livro == id){
+                indice_encontrado = indice;
+                break;
+            }
+        }
+
+        long long endereco = indice_encontrado.endereco;
+        ifstream arquivo_bin(nomeArquivoBin, ios::binary);
+
+        if (arquivo_bin.is_open()) {
+            arquivo_bin.seekg(endereco);
+
+            // Lê o tamanho do registro
+            int tamanho;
+            if (!arquivo_bin.read(reinterpret_cast<char*>(&tamanho), sizeof(int))) {
+                cerr << "Erro: falha ao ler o tamanho do registro." << endl;
+                return Registro(); // Ou lance uma exceção
+            }
+
+            // Aloca o buffer para os dados do registro
+            string buffer_registro;
+            buffer_registro.resize(tamanho, '\0');
+
+            // Lê os dados do registro
+            if (!arquivo_bin.read(&buffer_registro[0], tamanho)) {
+                cerr << "Erro: falha ao ler os dados do registro." << endl;
+                return Registro(); // Ou lance uma exceção
+            }
+
+            Registro registro_encontrado;
+            registro_encontrado.unpack(buffer_registro);
+
+            arquivo_bin.close();
+            return registro_encontrado;
+        } else {
+            cerr << "Erro ao abrir o arquivo binário." << endl;
+            return Registro();
+        }
+    } else {
+        cout << "Livro com ID " << id << " não encontrado." << endl;
+        return Registro();
+    }
+}
 

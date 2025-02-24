@@ -13,6 +13,9 @@ class Buffer{
     string nomeArquivo;
     string nomeArquivoBin;
     string buffer;
+    string nomeIndiceBin;
+    ArvoreBinaria<Indice> arvore;
+
 
     vector<Registro>lerDadosCSV();
 
@@ -21,6 +24,9 @@ class Buffer{
     
     void escreverRegistroFixo(int reg, long long endereco);
     vector<Indice> lerRegistroFixo();
+
+    void inserirIndicesArvore(const vector<Indice>& indices);
+    Registro buscarRegisro(int id);
 
 };
 

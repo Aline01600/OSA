@@ -9,7 +9,7 @@ using namespace std;
 string Registro::pack(){
     stringstream linhaStream;
     linhaStream << ID << "|" << titulo << "|" << autor << "|" <<
-    anoPublicacao << "|" << categoria << "|" << genero <<"|";
+    anoPublicacao << "|" << categoria << "|";
     
     string dados = linhaStream.str();
     int tamanho = dados.size();
@@ -36,5 +36,4 @@ void Registro::unpack(string& buffer) {
     getline(ss, autor, '|');
     getline(ss, anoPublicacao, '|');
     getline(ss, categoria, '|');
-    getline(ss, genero, '|');
 }

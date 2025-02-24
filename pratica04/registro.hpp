@@ -12,7 +12,6 @@ class Registro{
     string autor;
     string anoPublicacao;
     string categoria;
-    string genero;
 
     string pack();
     void unpack(string& buffer);
