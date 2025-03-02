@@ -13,7 +13,7 @@ vector<Registro> Buffer::lerDadosCSV(){
        return{};
     }
 
-    vector<Registro> pessoas;
+    vector<Registro> livros;
     string linha;
     Registro livro;
 
@@ -28,10 +28,10 @@ vector<Registro> Buffer::lerDadosCSV(){
         if(getline(linhaStream, campo, ';')) livro.anoPublicacao = (campo); 
         if(getline(linhaStream, campo, ';')) livro.categoria = (campo);
         
-       pessoas.push_back(livro);
+       livros.push_back(livro);
     }
     arquivo.close();
-    return pessoas;   
+    return livros;   
 }
 
 void Buffer::escreverRegistroFixo(int id, long long endereco){
@@ -136,36 +136,29 @@ Registro Buffer::buscarRegisro(int id) {
     Indice indice_busca;
     indice_busca.ID_livro = id;
 
-    if (arvore.Pesquisar(indice_busca)) {
-        Indice indice_encontrado;
-        for (const auto& indice : lerRegistroFixo()){
-            if(indice.ID_livro == id){
-                indice_encontrado = indice;
-                break;
-            }
-        }
+    Nodo<Indice>* nodo_encontrado = arvore.Pesquisar(indice_busca); // Passa o objeto Indice
 
+    if (nodo_encontrado != nullptr) {
+        Indice indice_encontrado = nodo_encontrado->getItem();
         long long endereco = indice_encontrado.endereco;
+
         ifstream arquivo_bin(nomeArquivoBin, ios::binary);
 
         if (arquivo_bin.is_open()) {
             arquivo_bin.seekg(endereco);
 
-            // Lê o tamanho do registro
             int tamanho;
             if (!arquivo_bin.read(reinterpret_cast<char*>(&tamanho), sizeof(int))) {
                 cerr << "Erro: falha ao ler o tamanho do registro." << endl;
-                return Registro(); // Ou lance uma exceção
+                return Registro(); 
             }
 
-            // Aloca o buffer para os dados do registro
             string buffer_registro;
             buffer_registro.resize(tamanho, '\0');
 
-            // Lê os dados do registro
             if (!arquivo_bin.read(&buffer_registro[0], tamanho)) {
                 cerr << "Erro: falha ao ler os dados do registro." << endl;
-                return Registro(); // Ou lance uma exceção
+                return Registro(); 
             }
 
             Registro registro_encontrado;

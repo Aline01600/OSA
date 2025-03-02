@@ -12,8 +12,8 @@ class Buffer{
     public:
     string nomeArquivo;
     string nomeArquivoBin;
-    string buffer;
     string nomeIndiceBin;
+    string buffer;
     ArvoreBinaria<Indice> arvore;
 
 

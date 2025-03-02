@@ -29,6 +29,10 @@ class Nodo
 			esq = e;
 			dir = d;
 		}
+        // Getter para acessar o membro item
+        TIPO getItem() const {
+            return item;
+        }
     friend class ArvoreBinaria<TIPO>;
 };
 
@@ -39,7 +43,7 @@ class ArvoreBinaria
         Nodo<TIPO>* raiz;
 
         Nodo<TIPO>* Inserir(TIPO valor, Nodo<TIPO>* n);
-        bool Pesquisar(TIPO valor, Nodo<TIPO>* n);
+        Nodo<TIPO>* Pesquisar(TIPO valor, Nodo<TIPO>* n);
 
         Nodo<TIPO>* Remover(TIPO valor, Nodo<TIPO>* n);
         Nodo<TIPO>* RemoverNodo(Nodo<TIPO>* n);
@@ -55,7 +59,7 @@ class ArvoreBinaria
     public:
         ArvoreBinaria(){ raiz = NULL;   }
         void Inserir(TIPO valor);
-        bool Pesquisar(TIPO valor);
+        Nodo<TIPO>* Pesquisar(TIPO valor);
 
         void Remover(TIPO valor);
         ~ArvoreBinaria(){Destruir(raiz);}
@@ -119,17 +123,17 @@ Nodo<TIPO>* ArvoreBinaria<TIPO>::Inserir(TIPO valor, Nodo<TIPO>* n)
 
 
 template <class TIPO>
-bool ArvoreBinaria<TIPO>::Pesquisar(TIPO valor)
+Nodo<TIPO>* ArvoreBinaria<TIPO>::Pesquisar(TIPO valor)
 {
     return Pesquisar(valor, raiz);
 }
 template <class TIPO>
-bool ArvoreBinaria<TIPO>::Pesquisar(TIPO valor, Nodo<TIPO>* n)
+Nodo<TIPO>* ArvoreBinaria<TIPO>::Pesquisar(TIPO valor, Nodo<TIPO>* n)
 {
     if ( n == NULL )
-        return false;
+        return NULL;
     else if ( n->item == valor )
-        return true;
+        return n;
     else if ( valor > n->item )
         return Pesquisar(valor, n->dir);
     else

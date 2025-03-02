@@ -28,10 +28,9 @@ void Registro::unpack(string& buffer) {
     string dados(buffer.begin() + sizeof(int), buffer.end());
     stringstream ss(dados);
 
-    string ID_str;
-
+    string ID_str; 
     getline(ss, ID_str, '|');
-    ID = stoi(ID_str);  
+    ID = stoi(ID_str);
     getline(ss, titulo, '|');
     getline(ss, autor, '|');
     getline(ss, anoPublicacao, '|');
